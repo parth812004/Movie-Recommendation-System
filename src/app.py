@@ -4,8 +4,10 @@ import streamlit as st
 import requests
 from requests.exceptions import ConnectionError
 import time
+import os
 
 compressed_file_path = "src/model/similarity.pkl.gz"
+movie_list_path = "src/model/movie_list.pkl"
 
 def recommend(movie):
     index = movies[movies['title'] == movie].index[0]
@@ -16,9 +18,20 @@ def recommend(movie):
     return recommended_movie_names
 
 st.header('Movie Recommender System')
-movies = pickle.load(open('/src/model/movie_list.pkl','rb'))
-with gzip.open(compressed_file_path, "rb") as f:
-    similarity = pickle.load(f)
+
+try:
+    with open(movie_list_path, 'rb') as f:
+        movies = pickle.load(f)
+except FileNotFoundError:
+    st.error(f"File not found: {movie_list_path}")
+    st.stop()
+
+try:
+    with gzip.open(compressed_file_path, "rb") as f:
+        similarity = pickle.load(f)
+except FileNotFoundError:
+    st.error(f"File not found: {compressed_file_path}")
+    st.stop()
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
