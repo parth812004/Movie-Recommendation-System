@@ -5,7 +5,7 @@ import requests
 from requests.exceptions import ConnectionError
 import time
 
-compressed_file_path = "/Users/parthsoni/Documents/GitHub/Movie-Recommendation-System/src/model/similarity.pkl.gz"
+compressed_file_path = "src/model/similarity.pkl.gz"
 
 def recommend(movie):
     index = movies[movies['title'] == movie].index[0]
@@ -16,7 +16,7 @@ def recommend(movie):
     return recommended_movie_names
 
 st.header('Movie Recommender System')
-movies = pickle.load(open('/Users/parthsoni/Documents/GitHub/Movie-Recommendation-System/src/model/movie_list.pkl','rb'))
+movies = pickle.load(open('/src/model/movie_list.pkl','rb'))
 with gzip.open(compressed_file_path, "rb") as f:
     similarity = pickle.load(f)
 
